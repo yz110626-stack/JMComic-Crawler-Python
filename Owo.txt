@@ -1,0 +1,320 @@
+
+
+[系统消息]词库初始化
+$全局变量 appsecret vlbSJB3wpjdYTPLIFDBA99ABDFILPTYd$
+$全局变量 过期时间 0$$全局变量 bot凭证 0$
+$添加主人 3429126643$
+$添加主人 BBDCEEBCE28D7D956C3C1A86C8D62701$
+//1478383296
+//$添加主人 27FCADC45DEB1950AAC79750699BD805$
+$全局变量 外显 外面那么冷，进来坐会儿吧～$
+
+[系统消息]协议
+R:%Dat%
+如果:@R[op]==11
+返回
+如果尾
+如果:@R[t]==INTERACTION_CREATE
+$回调 凭证$
+$超文本协议 H 创建$
+$超文本协议 H 请求 链接 https://api.sgroup.qq.com/interactions/@R[d][id]$
+$超文本协议 H 请求 超时 0$
+$超文本协议 H 请求 方式 PUT$
+$超文本协议 H 请求 文本 {"code":0}$
+$超文本协议 H 请求 标头 Authorization @t[Authorization]$
+$超文本协议 H 请求 标头 Content-Type application/json$
+$超文本协议 H 请求 跟随 N$
+$超文本协议 H 应答 文本 RT$
+$超文本协议 H 连接 RC$
+$新建消息 X$
+$添加消息 X Account 1478383296$
+$添加消息 X Group$
+$添加消息 X GroupId 1030775923$
+文:按钮被按下：\n%R%\n回应：%RC%\n%RT%
+$添加消息 X Text %文%$
+$发送消息 X$
+
+执行([ ]|\n)?([\s\S]*)
+如果:$主人 %QQ%$==0
+哒咩
+返回
+如果尾
+xzb:%括号2%
+$执行 %xzb%$
+
+测试按钮
+收到
+$发送$
+#->var:
+[
+  {
+    "buttons": [
+      {
+        "id": "btn_跳转_001",
+        "render_data": {
+          "label": "跳转QQ官网",
+          "style": 1
+        },
+        "action": {
+          "permission": {
+            "type": 2
+          },
+          "type": 0,
+          "data": "https://q.qq.com",
+          "unsupport_tips": "暂不支持跳转"
+        }
+      },
+      {
+        "id": "btn_回调_002",
+        "render_data": {
+          "label": "回调按钮",
+          "style": 2
+        },
+        "action": {
+          "permission": {
+            "type": 2
+          },
+          "type": 1,
+          "data": "owo",
+          "unsupport_tips": "暂不支持此操作"
+        }
+      },
+      {
+        "id": "btn_预填_003",
+        "render_data": {
+          "label": "预填文本",
+          "style": 3
+        },
+        "action": {
+          "permission": {
+            "type": 2
+          },
+          "type": 2,
+          "data": "测试",
+          "enter": false,
+          "unsupport_tips": "暂不支持预填"
+        }
+      }
+    ]
+  }
+]
+#->var:row
+TTT:#来试试按钮功能吧～
+$回调 to发送md$
+
+回调按钮
+收到
+$发送$
+#->var:
+[
+  {
+    "buttons": [
+      {
+        "id": "1",
+        "render_data": {
+          "label": "回调按钮",
+          "style": 2
+        },
+        "action": {
+          "permission": {
+            "type": 2
+          },
+          "type": 1,
+          "data": "owo",
+          "unsupport_tips": "暂不支持此操作"
+        }
+      }
+    ]
+  }
+]
+#->var:row
+TTT:owo?
+$回调 to发送md$
+
+[内部]to发送(文字|md|卡片|embed|图片|音频|视频|文件)
+如果:$字符长度 %xxy%$==5&$字节长度 %xxy%$==5
+xxy:$消息来源处$
+如果尾
+如果:$字符长度 %TTT%$==5&$字节长度 %TTT%$==5
+TTT:这是一条未被定义的消息
+如果尾
+O.o:{"文字":"0","md":"2","卡片":"3","embed":"4","%括号1%":"7"}
+O.o:@O.o[%括号1%]
+P:{}
+$JSON 添加 P 整数 msg_type %O.o%$
+如果:%括号1%==文字
+$JSON 添加 P 字符 content %TTT%$
+如果尾
+如果:%括号1%==md
+//这里按钮id就不适配了，反正我没有（）
+mak:{}
+$JSON 添加 mak 字符 content %TTT%$
+$JSON 添加 P 对象 markdown %mak%$
+//如果:$JSON 格式化 row$!=null
+如果:$字符长度 %row%$!=5&$字节长度 %row%$!=5
+Row:{}
+$JSON 添加 Row 对象 rows %row%$
+$JSON 添加 P 对象 keyboard {"content":%Row%}$
+如果尾
+如果:%括号1%==卡片
+$JSON 添加 P 对象 ark %TTT%$
+如果尾
+如果:%O.o%==7
+$回调 富媒体%括号1%$
+如果:$字符长度 %fio%$==5&$字节长度 %fio%$==5
+返回
+如果尾
+如果:%xxy%==$消息来源处$
+$JSON 添加 P 字符 msg_id %MsgId%$
+如果尾
+med:{}
+$JSON 添加 med 字符 file_info %fio%$
+$JSON 添加 P 对象 media %med%$
+如果尾
+$新建消息 X$
+$添加消息 X Account %Account%$
+$添加消息 X Reply$
+$添加消息 X Cmd SendPost$
+U:/v2/%xxy%/messages
+$添加消息 X Url %U%$
+$添加消息 X Dat %P%$
+$发送消息 X R$
+R:%R:Dat%
+如果:$JSON 包含 R message$
+aaa:@R[message]
+%aaa%
+$发送$
+$红色日志 %aaa%$
+如果尾
+
+[内部]富媒体(图片|音频|视频|文件|.*)
+fmt:%TTT%
+qwq:{"图片":"1","视频":"2","音频":"3","%括号1%":"4"}
+如果:$正则 %TTT% http(s)?://.*$
+fmt:%临时文件%
+$下载 %fmt% %TTT% dld$
+如果:%dld%==0
+$红色日志 [%TTT%]无法下载$
+$中断$
+返回
+如果尾
+如果尾
+##预上传
+Ffp:$文件分片 10002432 %fmt%$
+O.o:%临时文件%
+o.O:$Base64DecodeFile %O.o% @Ffp[0]$
+$新建消息 X$
+$添加消息 X Account %Account%$
+$添加消息 X Reply$
+$添加消息 X Cmd SendPost$
+U:/v2/%xxy%/upload_prepare
+$添加消息 X Url %U%$
+#->var:
+{
+  "file_type": @qwq[%括号1%],
+  "file_size": "$文件大小 %fmt%$",
+  "file_name": "owo",
+  "md5": "$文件MD5 %fmt%$",
+  "sha1": "$文件SHA1 %fmt%$",
+  "md5_10m": "$文件MD5 %O.o%$"
+}
+#->var:P
+$添加消息 X Dat %P%$
+$发送消息 X RRR$
+RRR:%RRR:Dat%
+//预上传
+$删除 %O.o%$
+如果:$JSON 包含 RRR message$
+$红色日志 @RRR[message]$
+返回
+如果尾
+D:@RRR[upload_id]
+par:@RRR[parts]
+fpz:@RRR[block_size]
+Ffp:$文件分片 %fpz% %fmt%$
+awa:0
+:fpc
+如果:$JSON 长度 par$>%awa%
+url:@RRR[parts][%awa%][presigned_url]
+b64:@Ffp[%awa%]
+O.o:%临时文件%
+o.O:$Base64DecodeFile %O.o% %b64%$
+$超文本协议 H 创建$
+$超文本协议 H 请求 链接 %url%$
+$超文本协议 H 请求 超时 0$
+$超文本协议 H 请求 方式 PUT$
+$超文本协议 H 请求 文件 %O.o%$
+$超文本协议 H 请求 跟随 N$
+$超文本协议 H 应答 文本 TTT$
+$超文本协议 H 连接 RC$
+$新建消息 X$
+$添加消息 X Account %Account%$
+$添加消息 X Reply$
+$添加消息 X Cmd SendPost$
+U:/v2/%xxy%/upload_part_finish
+$添加消息 X Url %U%$
+#->var:
+{
+  "upload_id": "%D%",
+  "part_index": @RRR[parts][%awa%][index],
+  "block_size": "$文件大小 %O.o%$",
+  "md5": "$文件MD5 %O.o%$"
+}
+#->var:P
+$添加消息 X Dat %P%$
+$发送消息 X RRA$
+如果:$JSON 包含 RRA message$
+//失败就失败吧，没人能保证第二次、第三次 甚至更多次能成功
+$红色日志 @RRA[message]$
+返回
+如果尾
+$删除 %O.o%$
+awa:[%awa%+1]
+$标签跳转 fpc$
+如果尾
+$新建消息 X$
+$添加消息 X Account %Account%$
+$添加消息 X Reply$
+$添加消息 X Cmd SendPost$
+U:/v2/%xxy%/files
+$添加消息 X Url %U%$
+#->var:
+{
+  "file_type": 2,
+  "srv_send_msg": false,
+  "file_name": "video.mp4",
+  "upload_id": "%D%"
+}
+#->var:P
+$添加消息 X Dat %P%$
+$发送消息 X RRB$
+RRB:%RRB:Dat%
+如果:$JSON 包含 RRB message$
+$红色日志 @RRB[message]$
+返回
+如果尾
+fio:@RRB[file_info]
+
+[内部]凭证
+如果:%过期时间%>%时间戳秒%
+t:{"Authorization":"QQBot %凭证%","Content-Type":"application/json"}
+返回
+如果尾
+b:{"appId":"%AppId%","clientSecret":"%appsecret%"}
+t:{"Content-Type":"application/json"}
+j:$访问 POST https://bots.qq.com/app/getAppAccessToken %b% %t% hyt$
+时:[%时间戳秒%+$JSON 获取 j expires_in 0$]
+$全局变量 过期时间 %时%$
+$全局变量 凭证 @j[access_token]$
+t:{"Authorization":"QQBot %凭证%","Content-Type":"application/json"}
+
+[函数]消息来源处
+如果:$好友消息$
+users/%QQ%
+返回
+如果尾
+如果:$群聊消息$
+groups/%群号%
+返回
+如果尾
+groups/4AA9D5FF1EF353FDE8D0082F7F806C86
